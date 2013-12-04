@@ -1,0 +1,35 @@
+<html>
+<head>
+<title>SquarePlanners</title>
+<link href="styles.css" type="text/css" rel="stylesheet">
+<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7/leaflet.css" />
+<script src="http://cdn.leafletjs.com/leaflet-0.7/leaflet.js"></script>
+</head>
+<body>
+<div id="header">
+	<h2>Welcome to SquarePlanners!</h2>
+	<button id="createnewItin" onclick="createNewItin();">Create New Itinerary</button>
+</div>
+	<!-- <div id="sidebar">
+		<button>Create New Itinerary</button>
+	</div> -->
+<div id="main">
+<form id="newItin">
+	<h3>Name of Itinerary:</h3>
+	<input type="text" placeholder="Name" id="nameItin">
+	<br/>
+	<h3>Starting Location:</h3>
+	<input type="text" placeholder="New York" id="startingLoc">
+	<br/>
+	<button onclick="newItin()">Submit</button>
+	<button onclick="hideItin()">Cancel</button>
+	<button>Press Me</button>
+</form>
+
+</div>
+<script src="https://code.jquery.com/jquery.js"></script>
+<script src="script.js"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,51 @@
+body {
+	background-color: #ccc;
+	margin:auto;
+}
+
+#header {
+	width:100%;
+	background-color: lightslategrey;
+	height:250px;
+	border-bottom: 20px solid black;
+	text-align: center;
+}
+
+h2 {
+	padding-top:20px;
+	text-align: center;
+	font: italic 45pt serif;
+	color:#fff;
+}
+
+h3 {
+	font: small-caps 30px serif;
+}
+
+
+
+#sidebar {
+	float:left;
+	width:25%;
+	background-color: green;
+	height:1000px;
+}
+
+#newItin {
+	display:none;
+}
+
+input[type=text] {
+	border: 2px solid #333;
+	border-radius: 2px;
+	font-size: 20px;
+	color: darkslategrey;
+}
+
+#createnewItin{
+	border: 2px solid #333;
+	border-radius: 5px;
+	background: none;
+	cursor: pointer;
+	font-size: 20px;
+}
