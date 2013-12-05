@@ -7,9 +7,14 @@ body {
 	padding-top:20px;	
 	width:100%;
 	background-color: lightslategrey;
-	height:250px;
+	height:200px;
 	border-bottom: 20px solid black;
 	text-align: center;
+}
+
+#main {
+	padding-left:50px;
+	padding-right:50px;
 }
 
 h2 {
@@ -20,7 +25,19 @@ h2 {
 }
 
 h3 {
-	font: small-caps 30px serif;
+	font: 30px serif;
+}
+
+h3 {
+	font-size: 16pt;
+	font-family: "Lucida Grande", Arial, sans-serif; 	
+	color: black;
+}
+
+p {
+	font-size: 12pt;
+	font-family: "Lucida Grande", Arial, sans-serif; 	
+	color: black;
 }
 
 #sidebar {
@@ -32,13 +49,6 @@ h3 {
 
 #newItin {
 	display:none;
-}
-
-input[type=text] {
-	border: 2px solid #333;
-	border-radius: 2px;
-	font-size: 20px;
-	color: darkslategrey;
 }
 
 button {
@@ -53,4 +63,21 @@ button:hover {
 	background: grey;
 }
 
+input[type="text"] {
+	border: 2px solid #333;	
+	border-radius: 2px;	
+	color: darkslategrey;
+	font-size: 20px;
+	font-family: "Lucida Grande", Arial, sans-serif; 
+	font-weight: normal; 
+}
+
+#add, #moreInfo {
+	font-size: 14px;
+	float: right;
+}
+
+#submit{
+	text-align: center;
+}
 

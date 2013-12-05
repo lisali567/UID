@@ -6,29 +6,43 @@
 <script src="http://cdn.leafletjs.com/leaflet-0.7/leaflet.js"></script>
 </head>
 <body>
+
 <div id="header">
 	<h2>Welcome to SquarePlanners!</h2>
 	<button id="createNewItin" onclick="createNewItin();">Create New Itinerary</button>
-	<button id="viewEditItin">Create New Itinerary</button>
+	<button id="viewEditItin">View/Edit Itinerary</button>
 
 </div>
 	<!-- <div id="sidebar">
 		<button>Create New Itinerary</button>
 	</div> -->
+
 <div id="main">
 <form id="newItin">
-	<h3>Name of Itinerary:</h3>
-	<input type="text" placeholder="Name" id="nameItin">
+	<h3>Name of Itinerary:
+		<input type="text" placeholder="Name" id="nameItin">
+	</h3>
+	
+	<h3>Search Location:
+		<input type="text" placeholder="Venue" id="startingLoc">
+		<input type="text" placeholder="<Default Location>" id="startingLoc">
+		<button>Go!</button>
+	</h3><br/>
+
+	<h3>Results</h3><hr/>
+	
+	<p>Example 1 <button id="add">Add</button> <button id="moreInfo">More Info</button></p> <hr/>	
+	<p>Example 1 <button id="add">Add</button> <button id="moreInfo">More Info</button></p> <hr/>	
+	
 	<br/>
-	<h3>Starting Location:</h3>
-	<input type="text" placeholder="New York" id="startingLoc">
-	<br/>
-	<button onclick="newItin()">Submit</button>
-	<button onclick="hideItin()">Cancel</button>
-	<button>Press Me</button>
+	<div id="submit">
+	<button onclick="newItin()">Save</button>
+	<button onclick="hideItin()">Trash</button>
+	</div>
 </form>
 
 </div>
+
 <script src="https://code.jquery.com/jquery.js"></script>
 <script src="script.js"></script>
 
