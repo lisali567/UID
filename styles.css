@@ -51,7 +51,7 @@ p {
 	display:none;
 }
 
-button {
+button, input[type="button"] {
 	border: 2px solid #333;
 	border-radius: 5px;
 	background: #ccc;
@@ -72,8 +72,8 @@ input[type="text"] {
 	font-weight: normal; 
 }
 
-#add, #moreInfo {
-	font-size: 14px;
+.add, .moreInfo {
+	font-size: 14px !important;
 	float: right;
 }
 
@@ -81,3 +81,10 @@ input[type="text"] {
 	text-align: center;
 }
 
+#searchResults {
+	display:none;
+}
+
+#finalList {
+	display:none;
+}
