@@ -8,6 +8,7 @@ Web Application:
 - modifications resulting from testing
 - remove from itinerary
 - welcome screen (?)
+- the venue search doesn't seem to work
 
 For Submission:
 - testing & notes
