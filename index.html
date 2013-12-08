@@ -9,13 +9,11 @@
 
 <div id="header">
 	<h2>Welcome to SquarePlanners!</h2>
-	<button id="createNewItin" onclick="createNewItin();">Create New Itinerary</button>
-	<button id="viewEditItin">View/Edit Itinerary</button>
+	<button id="createNewItin" onclick="createNewItin();">Create New Trip</button>
+	<button id="viewEditItin">View/Edit Trip</button>
 
 </div>
-	<!-- <div id="sidebar">
-		<button>Create New Itinerary</button>
-	</div> -->
+<!-- end of header div -->
 
 <div id="main">
 <form id="newItin">
@@ -25,30 +23,61 @@
 	
 	<h3>Search Location:</h3>
 		<input type="text" placeholder="Venue" id="venueLoc">
-		<input type="text" placeholder="<Default Location>" id="startingLoc">
+		<input type="text" placeholder="Location" id="startingLoc">
 		<input type="button" id="searchButt" value="Go!" name="input" onClick="getSearchResults();">
 	<br/>
 </form>
+
 	<div id="searchResults">
-	<h3>Results</h3><hr/>
-	<div id="myList">
+		<h3>Results:</h3>
+		<p style="color: red;"><i>**make sure to hit "save" at the bottom of the screen!**</i></p><hr/>
+		<div id="myList"></div>
+		
+		<br/>
+		<div id="submit">
+		<button onclick="saveItin()">Save</button>
+		<button onclick="hideItin()">Trash</button>
+		</div>
+
 	</div>
-	<br/>
+	<!-- end of searchResults div -->
 
-	<div id="submit">
-	<button onclick="saveItin()">Save</button>
-	<button onclick="hideItin()">Trash</button>
+	<div id= "finalList">
+		<h1>Trip 1 Itinerary</h1>
+		<select class="DropDownList Test" name="List" id="addedL"></select>
+		<hr/>
+
+		<p>Destination 1
+		<button class="moreInfo">More Information</button>
+		<button class="remove">X Remove</button></p>
+		<hr/>
+
+		<p>Destination 1
+		<button class="moreInfo">More Information</button>
+		<button class="remove">X Remove</button></p>
+		<hr/>
+				
+		<div id="mapDisp" class="mydiv"><hr/>
+		</div>
 	</div>
+	<!-- end of finalList div -->
+
+	<div id="viewEdit">
+		<h1>Your Trips</h1><hr/>
+		<div id="myTrips"></div>
+		
+		<input type="checkbox">Trip 1</input><button class="edit">View/Edit</button><hr/>
+		<input type="checkbox">Trip 2</input><button class="edit">View/Edit</button><hr/>
+		<input type="checkbox">Trip 3</input><button class="edit">View/Edit</button><hr/>
+		
+		<button style="background-color: red;">DELETE</button>		
+	</div>
+	<!-- end of viewEdit div -->	
+
 </div>
-<div id= "finalList">
-<h1>Final List</h1>
-	<select class="DropDownList Test" name="List" id="addedL">
-</select>
-<div id="mapDisp"  width="400px" height="300px" style ="position: relative" class="mydiv"><br><br><br><br><br><br><br><br><br><br><br><br></div>
-</div>
+<!-- end of main div -->
 
 
-</div>
 
 <script src="https://code.jquery.com/jquery.js"></script>
 <script src="script.js"></script>

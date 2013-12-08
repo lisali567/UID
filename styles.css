@@ -15,6 +15,7 @@ body {
 #main {
 	padding-left:50px;
 	padding-right:50px;
+	font-family: "Lucida Grande", Arial, sans-serif; 
 }
 
 h2 {
@@ -22,10 +23,6 @@ h2 {
 	font-size: 30pt;
 	font-family: "Lucida Grande", Arial, sans-serif; 	
 	color:#fff;
-}
-
-h3 {
-	font: 30px serif;
 }
 
 h3 {
@@ -40,14 +37,7 @@ p {
 	color: black;
 }
 
-#sidebar {
-	float:left;
-	width:25%;
-	background-color: green;
-	height:1000px;
-}
-
-#newItin {
+#newItin, #searchResults, #viewEdit, #finalList {
 	display:none;
 }
 
@@ -72,7 +62,23 @@ input[type="text"] {
 	font-weight: normal; 
 }
 
-.add, .moreInfo {
+input[type="checkbox"] {
+	border: 2px solid #333;	
+	border-radius: 2px;
+	width: 18px;	
+	height: 18px;
+	color: darkslategrey;
+	font-size: 20px;
+	font-family: "Lucida Grande", Arial, sans-serif; 
+	font-weight: normal; 
+}
+
+.add, .moreInfo, .edit {
+	font-size: 14px !important;
+	float: right;
+}
+
+.remove {
 	font-size: 14px !important;
 	float: right;
 }
@@ -81,10 +87,16 @@ input[type="text"] {
 	text-align: center;
 }
 
-#searchResults {
-	display:none;
+
+#mapDisp { 
+	height: 50%; 
+	position: relative;
 }
 
-#finalList {
-	display:none;
+select {
+	width: 250px;
+	padding: 5px;
+	font-size: 14px;
+	height: 25px;
+	border-radius: 0;
 }
