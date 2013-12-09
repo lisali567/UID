@@ -37,7 +37,7 @@ p {
 	color: black;
 }
 
-#newItin, #searchResults, #viewEdit, #finalList {
+#searchResults, #finalList {
 	display:none;
 }
 
@@ -99,4 +99,8 @@ select {
 	font-size: 14px;
 	height: 25px;
 	border-radius: 0;
+}
+
+a:link {
+	text-decoration: none;
 }
