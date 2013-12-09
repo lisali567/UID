@@ -37,7 +37,7 @@ p {
 	color: black;
 }
 
-#searchResults, #finalList {
+#searchResults, #finalList, #thisTrip {
 	display:none;
 }
 

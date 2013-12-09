@@ -59,7 +59,7 @@ function getSearchResults()
 	$("#searchResults").show();
 }
 
-
+//Prettify this
 function getPlaceInfo(divName)
 {
 	if (searchFail=="failed") {
@@ -187,7 +187,45 @@ function displayAllListNames()
 	var ctr=0;
 	store.forEach(function(key,val) {
 	    console.log(key);
-	    $("#myTrips").append('<input type="checkbox"><p style="display:inline;">'+key+'</input><button class="edit">View/Edit</button></p><hr/>');
+	    var viewSelectedList = "viewSelectedList('"+key+"');";
+	    $("#myTrips").append('<input type="checkbox"><p style="display:inline;">'+key+'</input><button class="edit" onclick="'+viewSelectedList+'">View/Edit</button></p><hr/>');
 	    ctr++;
 	});
+}
+
+var latArr=new Array();
+var elementToBeEdited;
+
+function viewSelectedList(tripName)
+{
+	$("#viewEdit").hide();
+	$("#thisTripName").html('');
+	$("#thisTripName").append("<em>"+tripName+"</em> Itinerary");
+	var result=store.get(tripName);
+	for(i=0;i<result.length;i++)
+	{
+		console.log('inside for');
+		var deleditfunc = "deleditfunc('"+tripName+"', '"+result[i].name+"');"
+		$("#thisTripDet").append('<div id="tripItem'+result[i].id+'"><p>'+result[i].name+'<button class="moreInfo">More Information</button><button class="remove" onclick="'+deleditfunc+'">X Remove</button></p><hr/></div>');
+	}
+	$("#thisTrip").show();
+}
+
+function deleditfunc(listName, itemName)
+{
+var res = store.get(listName);
+var temp=[];
+var tempctr=0;
+for(i=0;i<res.length;i++)
+{
+  if (res[i].name!= itemName)
+  {
+  	temp.push(res[i]);
+  }
+  else {
+  	$("#tripItem"+res[i].id+"").remove();
+  }
+}
+store.remove(listName);
+store.set(listName,temp);
 }
