@@ -46,8 +46,8 @@ function getSearchResults()
 				var recVenueId=items.venue.id;
     			console.log("venue is"+ recVenueId);
     			var getPlaceInfo = "getPlaceInfo('"+recVenueId+"');";
-    			var addPlaceToList = "addPlaceToList('"+recVenue+"', '"+recVenueId+"');";
-    			$("#myList").append('<p>'+recVenue+'<input type="button" id="add'+recVenueId+'" class="add" name="input" value="Add" onClick="'+addPlaceToList+'"> <input type="button" id="moreInfo'+recVenueId+'" class="moreInfo" name="infoBut" value="More Information" onClick="'+getPlaceInfo+'"></p><div id="moreInfo'+recVenueId+'"></div> <hr/>');
+    			var addPlaceToList = "addPlaceToList('"+recVenue.replace(/'/g, "\\'")+"', '"+recVenueId+"');";
+    			$("#myList").append('<p>'+recVenue+'<input type="button" id="add'+recVenueId+'" class="add" name="input" value="Add" onClick="'+addPlaceToList+'"> <input type="button" id="moreInfobut'+recVenueId+'" class="moreInfo" name="infoBut" value="More Information" onClick="'+getPlaceInfo+'"></p><div id="moreInfo'+recVenueId+'"></div> <hr/>');
     			$("#myList").attr("size",resSize);
 	  		});
 	    },
