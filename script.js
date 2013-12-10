@@ -105,11 +105,11 @@ function getPlaceInfo(divName)
 		    $.each(data.response.venue.tips.groups[0].items, function(i,items){
 		    	if (i<4) {
 		    		var tip=items.text;
-		    		$("#moreInfo"+divName+"").append('<br>tip is   '+tip);
+		    		$("#moreInfo"+divName+"").append('<br><b>Customer Tip</b>   '+tip);
 		    	}
 		    });
-		    $("#moreInfo"+divName+"").append('<br>time zone is '+data.response.venue.timeZone);
-		    $("#moreInfo"+divName+"").append('<br>number of checkins is   '+checkins);
+		    $("#moreInfo"+divName+"").append('<br><br>Time Zone: '+data.response.venue.timeZone);
+		    $("#moreInfo"+divName+"").append('<br>Check-Ins at this Location: '+checkins);
 		}).error(function() { alert("error"); });
 		$("#moreInfobut"+divName+"").attr("value", "Less Information");
 		$("#moreInfobut"+divName+"").css("background-color", "blue");

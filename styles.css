@@ -114,3 +114,7 @@ a:link {
 	border: 2px solid azure;
 	display: none;
 }
+
+img {
+	padding: 5px;
+}
