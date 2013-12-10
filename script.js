@@ -419,3 +419,67 @@ function deleteChecked()
 		}
 	});
 }
+
+
+function loadItinList()
+{
+	store.forEach(function(val, key) {
+    	$("#itinList").append("<option>"+val+"</option>");
+	})
+}
+
+function getResults()
+{
+	searchFail="succeeded";
+	var searchString=$('#startingLoc').val();
+	var venueString=$('#venueLoc').val();
+	$.ajax({
+    	url: 'https://api.foursquare.com/v2/venues/explore?near='+ searchString+'&query='+venueString+'&client_id=SC3J3U1LVJBWBL4YCBNBZCDF4IZJONWDZBRMD0SLFWFNGKJD&client_secret=AJGNKI2LJTQJAPC3KT3UQGZIGKBKTRA5JBCFQFZSRIGCWT3Y&v=20120101',
+    	dataType: 'json',
+    	success: function( data ) {
+	    	searchLat=data.response.geocode.center.lat;
+	    	searchLng=data.response.geocode.center.lng;
+	    	resSize=data.response.groups[0].items.length;
+			$.each(data.response.groups[0].items, function(i,items){
+				var recVenue=items.venue.name;
+				var recVenueId=items.venue.id;
+    			console.log("venue is"+ recVenueId);
+    			var getPlaceInfo = "getPlaceInfo('"+recVenueId+"');";
+    			var addPlaceToList = "addPlaceToList('"+recVenue.replace(/'/g, "\\'").replace(/"/g, "\\'")+"', '"+recVenueId+"');";
+    			$("#myList").append('<p>'+recVenue+'<input type="button" id="add'+recVenueId+'" class="add" name="input" value="Add" onClick="'+addPlaceToList+'"> <input type="button" id="moreInfobut'+recVenueId+'" class="moreInfo" name="infoBut" value="More Information" onClick="'+getPlaceInfo+'"></p><div id="moreInfo'+recVenueId+'"></div> <hr/>');
+	  		});
+	    },
+    	error: function( data ) {
+	      $("#myList").append('<p>Could not find any results for that location. Please enter another location and try again!</p>');
+	      searchFail="failed";
+    	}
+    });
+	$("#searchResults").show();
+}
+
+function saveThisList()
+{	
+	var itinName = $('#itinList').find(":selected").text();
+	var res = store.get(itinName);
+	for(var i=0;i<myListArr.length;i++)
+	{
+	  res.push(myListArr[i]);
+	}
+	store.remove(itinName);
+	store.set(itinName,res);
+	console.log(itinName);
+	$("#newItin").hide();
+	$("#searchResults").hide();
+	$("#finaListName").html('');
+	$("#finaListName").append("<em>"+itinName+"</em> Itinerary");
+	var newRes = store.get(itinName);
+	$("#itinDestList").html('');
+	for(var i=0;i<newRes.length;i++)
+	{
+		var deleditfunc = "deleditfunc('"+itinName+"', '"+res[i].name+"'); deleditfunc2('"+res[i].id+"');"
+		var getPlaceInfo = "getPlaceInfo('"+res[i].id+"');";
+    	$("#itinDestList").append('<div id="itinList'+res[i].id+'"><p>'+res[i].name+'<input type="button" id="moreInfobut'+res[i].id+'" class="moreInfo" name="infoBut" value="More Information" onClick="'+getPlaceInfo+'"><button class="remove" id="remove'+res[i].id+'" onclick="'+deleditfunc+'">X Remove</button></p><div id="moreInfo'+res[i].id+'"></div><hr/></div>');
+	}
+	$("#finalList").show();	
+	viewMap();
+}
