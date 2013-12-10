@@ -26,6 +26,7 @@ function trash()
 	listLat.length = 0;
 	listLng.length = 0;
 	myListArr.length = 0;
+	location.reload();
 }
 
 function onInitFileSystem(filesystem) {
