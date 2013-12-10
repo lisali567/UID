@@ -11,6 +11,7 @@
 	<a href="index.html"><h2>Welcome to SquarePlanners!</h2></a>
 	<a href="create_new.html"><button id="createNewItin">Create New Trip</button></a>
 	<a href="your_trips.html"><button id="viewEditItin">View/Edit Trip</button></a>
+	<p>powered by FourSquare</p>	
 
 </div>
 <!-- end of header div -->
@@ -21,15 +22,15 @@
 		Error: fill in all required fields!
 	</div>
 	<h3 style="margin-bottom:0;">Name of Itinerary:</h3>
-	<span style="font-size:10px; color:darkred; display:block;">*required</span><br/>
-		<input type="text" placeholder="Name" id="listName">
+	<br/>
+		<input type="text" placeholder="Name" id="listName">*
 	
 	
 	<h3>Explore Location:</h3>
 		<input type="text" placeholder="Venue" id="venueLoc">
-		<input type="text" placeholder="Location" id="startingLoc">
-		<span style="font-size:10px; color:darkred; display:block; margin-left:230px;">*required</span>
+		<input type="text" placeholder="Location" id="startingLoc">*
 		<input type="button" id="searchButt" value="Go!" name="input" onClick="getSearchResults();">
+		<br/><i>*required</i>	
 	<br/>
 </form>
 
