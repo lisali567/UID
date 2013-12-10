@@ -10,6 +10,7 @@ var myListArr=[];
 var removeList = new Array();
 var removeTripName;
 var currentMap;
+var show = 0;
 
 function createNewItin()
 {
@@ -73,6 +74,35 @@ function getSearchResults()
     });
 	$("#searchResults").show();
 }
+}
+
+function viewCloseMap() {
+	var view = $("#viewthisMap").attr('value');
+	if(view=="View Map")
+	{
+		//Map already initialized
+		if(show == 1)
+		{
+			console.log("view");
+			$("#mapDisp2").show();
+			$("#viewthisMap").attr('value', 'Close Map');
+		}
+		//Map not yet initialized
+		else {
+			console.log("view2");
+			viewMap2();
+			updateMap();
+			show = 1;
+			$("#mapDisp2").show();
+			$("#viewthisMap").attr('value', 'Close Map');
+		}
+	}
+	else
+	{
+		console.log("close");
+		$("#mapDisp2").hide();
+		$("#viewthisMap").attr('value', 'View Map');
+	}
 }
 
 //Prettify this
@@ -239,8 +269,17 @@ function viewMap2()
 
 function updateMap()
 {
-	currentMap.remove();
-	viewMap2();
+	var view = $("viewthisMap").attr('value');
+	if(view=="Close Map")
+	{
+		currentMap.remove();
+		viewMap2();
+	}
+	else {
+		currentMap.remove();
+		viewMap2();
+		$("#mapDisp2").hide();
+	}
 }
 
 //TODO: save the array listArr to local storage with listName captured below
@@ -355,6 +394,13 @@ function cancelList()
 	removeTripName = "";
 	$("#thisTrip").hide();
 	$("#viewEdit").show();
+	show = 0;
+	currentMap.remove();
+	$("#mapDisp2").hide();
+	$("#viewthisMap").attr('value', 'View Map');
+	listLat.length =0;
+	listLng.length =0;
+	listArr.length =0;
 }
 
 function deleteChecked()
