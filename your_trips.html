@@ -22,13 +22,19 @@
 		<div id="myTrips">
 		</div>
 			
-		<button style="background-color: red;">DELETE</button>		
+		<button style="background-color: red;" onclick="deleteChecked();">DELETE</button>		
 	</div>
 	<div id="thisTrip">
 		<div id="thisTripDet">
-			<h1 id="thisTripName">Trip 1 Itinerary</h1>
 		</div>
-		<button>Save</button>
+		<button onclick="viewMap2(); updateMap();">View Map</button>
+		<br/>
+		<div id="mapDisp2" class="mydiv">
+		</div>
+		<!-- <button>Add New Locations</button> -->
+		<br/>
+		<button onclick="delList();">Save</button>
+		<button onclick="cancelList();">Cancel</button>
 	</div>
 	<!-- end of viewEdit div -->	
 

@@ -37,7 +37,7 @@ p {
 	color: black;
 }
 
-#searchResults, #finalList, #thisTrip {
+#searchResults, #finalList, #thisTrip, #mapDisp2 {
 	display:none;
 }
 
@@ -88,7 +88,7 @@ input[type="checkbox"] {
 }
 
 
-#mapDisp { 
+#mapDisp, #mapDisp2 { 
 	height: 50%; 
 	position: relative;
 }
@@ -103,4 +103,14 @@ select {
 
 a:link {
 	text-decoration: none;
+}
+
+#error {
+	color: orange;
+	font-size: 16px;
+	background-color: darkcyan;
+	padding:6px;
+	margin-top:10px;
+	border: 2px solid azure;
+	display: none;
 }
