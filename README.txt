@@ -1,10 +1,10 @@
 TODO List:
 
 Web Application:
-- add new places to itnerary
 - modifications resulting from testing
 - welcome screen (?)
 - corresponding buttons (i.e. view/close, etc.)
+- fix map
 - prettify things
 - error checking
 
