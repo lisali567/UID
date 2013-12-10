@@ -49,8 +49,8 @@ button, input[type="button"] {
 	font-size: 20px;
 }
 
-button:hover { 
-	background: grey;
+button:hover, input[type="button"]:hover { 
+	background: rgb(128, 128, 127);
 }
 
 input[type="text"] {
@@ -81,6 +81,10 @@ input[type="checkbox"] {
 .remove {
 	font-size: 14px !important;
 	float: right;
+}
+
+.remove:hover {
+	background: red !important;
 }
 
 #submit{
@@ -115,6 +119,29 @@ a:link {
 	display: none;
 }
 
-img {
-	padding: 5px;
+
+.tips {
+	color: #413F3F;
+	font-size: 10pt;
+}
+
+.moreInfoBox {
+	font-size: 10pt;
+}
+
+.info {
+	color: #7A7A7A;
+	font-size: 11px;
+	display: block;
+	padding: 0 0px 5px 0px;
+}
+.images {
+	border-radius: 10px;
+	border: 2px solid #eee;
+	margin: 2px;
+	float: right;
+}
+
+.addNewLoc:hover {
+	background: green;
 }
