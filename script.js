@@ -12,11 +12,13 @@ var removeTripName;
 var currentMap;
 var show = 0;
 
+//displays the Create Itinerary area
 function createNewItin()
 {
 	$("#newItin").show();
 }
 
+//
 function trash()
 {
 	$(".add").attr("style","").attr("value", "Add");
@@ -29,56 +31,53 @@ function trash()
 	location.reload();
 }
 
-function onInitFileSystem(filesystem) {
-	filesystem.root.getFile('treehouse.txt', { create: true, exclusive: true },
-    function(fileEntry) {
-      // Do something with your new file.
-    }, errorHandler);
-}
-
-function errorHandler(error) {
-}
-
+//Returns the search results for the user's query
+//Displays the results on the page
 function getSearchResults()
 {	
+	//User did not enter name for Trip
 	if($("#listName").val().length == 0 || $("#startingLoc").val().length == 0)
 	{
 		$("#error").show();
 	}
 	else {
 		$("#error").hide();
-	searchFail="succeeded";
-	$('#myList').html('');
-	var resSize=0;
-	var searchString=$('#startingLoc').val();
-	var venueString=$('#venueLoc').val();
-	$.ajax({
-    	url: 'https://api.foursquare.com/v2/venues/explore?near='+ searchString+'&query='+venueString+'&client_id=SC3J3U1LVJBWBL4YCBNBZCDF4IZJONWDZBRMD0SLFWFNGKJD&client_secret=AJGNKI2LJTQJAPC3KT3UQGZIGKBKTRA5JBCFQFZSRIGCWT3Y&v=20120101',
-    	dataType: 'json',
-    	success: function( data ) {
-	    	searchLat=data.response.geocode.center.lat;
-	    	searchLng=data.response.geocode.center.lng;
-	    	resSize=data.response.groups[0].items.length;
-			$.each(data.response.groups[0].items, function(i,items){
-				var recVenue=items.venue.name;
-				var recVenueId=items.venue.id;
-    			console.log("venue is"+ recVenueId);
-    			var getPlaceInfo = "getPlaceInfo('"+recVenueId+"');";
-    			var addPlaceToList = "addPlaceToList('"+recVenue.replace(/'/g, "\\'").replace(/"/g, "\\'")+"', '"+recVenueId+"');";
-    			$("#myList").append('<p>'+recVenue+'<input type="button" id="add'+recVenueId+'" class="add" name="input" value="Add" onClick="'+addPlaceToList+'"> <input type="button" id="moreInfobut'+recVenueId+'" class="moreInfo" name="infoBut" value="More Information" onClick="'+getPlaceInfo+'"></p><div class="moreInfoBox" id="moreInfo'+recVenueId+'"></div> <hr/>');
-	  		});
-	    },
-    	error: function( data ) {
-	      $("#myList").append('<p>Could not find any results for that location. Please enter another location and try again!</p>');
-	      searchFail="failed";
-    	}
-    });
+		searchFail="succeeded";
+		$('#myList').html('');
+		var resSize=0;
+		var searchString=$('#startingLoc').val();
+		var venueString=$('#venueLoc').val();
+		//Call Foursquare to return data about the different results
+		$.ajax({
+	    	url: 'https://api.foursquare.com/v2/venues/explore?near='+ searchString+'&query='+venueString+'&client_id=SC3J3U1LVJBWBL4YCBNBZCDF4IZJONWDZBRMD0SLFWFNGKJD&client_secret=AJGNKI2LJTQJAPC3KT3UQGZIGKBKTRA5JBCFQFZSRIGCWT3Y&v=20120101',
+	    	dataType: 'json',
+	    	success: function( data ) {
+		    	searchLat=data.response.geocode.center.lat;
+		    	searchLng=data.response.geocode.center.lng;
+		    	resSize=data.response.groups[0].items.length;
+				$.each(data.response.groups[0].items, function(i,items){
+					var recVenue=items.venue.name;
+					var recVenueId=items.venue.id;
+	    			console.log("venue is"+ recVenueId);
+	    			var getPlaceInfo = "getPlaceInfo('"+recVenueId+"');";
+	    			var addPlaceToList = "addPlaceToList('"+recVenue.replace(/'/g, "\\'").replace(/"/g, "\\'")+"', '"+recVenueId+"');";
+	    			$("#myList").append('<p>'+recVenue+'<input type="button" id="add'+recVenueId+'" class="add" name="input" value="Add" onClick="'+addPlaceToList+'"> <input type="button" id="moreInfobut'+recVenueId+'" class="moreInfo" name="infoBut" value="More Information" onClick="'+getPlaceInfo+'"></p><div class="moreInfoBox" id="moreInfo'+recVenueId+'"></div> <hr/>');
+		  		});
+		    },
+		    //Could not find any locations
+	    	error: function( data ) {
+		      $("#myList").append('<p>Could not find any results for that location. Please enter another location and try again!</p>');
+		      searchFail="failed";
+	    	}
+	    });
 	$("#searchResults").show();
-}
+	}
 }
 
+//Allows user to View and Close the map
 function viewCloseMap() {
 	var view = $("#viewthisMap").attr('value');
+	//Map currently closed
 	if(view=="View Map")
 	{
 		//Map already initialized
@@ -98,6 +97,7 @@ function viewCloseMap() {
 			$("#viewthisMap").attr('value', 'Close Map');
 		}
 	}
+	//Map currently open
 	else
 	{
 		console.log("close");
@@ -106,7 +106,7 @@ function viewCloseMap() {
 	}
 }
 
-//Prettify this
+//Displays additional information for each venue
 function getPlaceInfo(divName)
 {
 	var buttonColor = $("#moreInfobut"+divName+"").css('background-color');
@@ -119,11 +119,13 @@ function getPlaceInfo(divName)
 	else
 	{
 		$("#moreInfo"+divName+"").html('');
+		//Call to FourSquare to get information about location
 		$.getJSON('https://api.foursquare.com/v2/venues/'+ divName+'?oauth_token=JHPVGF1KAR2F5RBE0JDHKU0X0KOVGQGZKPFFJDNL3QIDMIH1&v=20131201',
 		function(data) {
 			var checkins=data.response.venue.stats.checkinsCount;
-		    console.log("no of checkins is "+checkins);
+		    //FourSquare URL
 		    var canonicalURL=data.response.venue.canonicalUrl;
+		    //If location has hours listed
 		    var status = data.response.venue.hours;
 		    if(typeof status === "undefined")
 		    {
@@ -141,12 +143,12 @@ function getPlaceInfo(divName)
 		    	var imgurl=pre+'100x100'+suf;
 		    	if (i<4)
 		    		$("#moreInfo"+divName+"").append('<img src='+imgurl+' class="images">');
-		    });
+		    	});
 		    }
 		    else {
 		    	$("#moreInfo"+divName+"").append('<em>No photos available.</em><br/>');
 		    }
-
+		    //Add logisitical information
 			$("#moreInfo"+divName+"").append('<span class="info"><b>Hours Today: </b>'+status+'</span><br/>');
 			$.each(data.response.venue.attributes.groups, function(i,groups){
 		    	var name=groups.items[0].displayName;
@@ -157,27 +159,29 @@ function getPlaceInfo(divName)
 		    });
 		    if(data.response.venue.tips.count > 0)
 		    {
-		    //get tips
-		    $.each(data.response.venue.tips.groups[0].items, function(i,items){
-		    	if (i<4) {
-		    		var tip=items.text;
-		    		$("#moreInfo"+divName+"").append('<br><span class="tips"><b>Customer Tip: </b><em>'+tip+'</em></span>');
-		    	}
-		    });
-		}
-		else {
-		    	$("#moreInfo"+divName+"").append('<em>No tips available.</em>');
-		    }
-		$("#moreInfo"+divName+"").append('<br><br>Time Zone: '+data.response.venue.timeZone);
-		$("#moreInfo"+divName+"").append('<br>Check-Ins at this Location: '+checkins);
-		$("#moreInfo"+divName+"").append('<br><a href="'+canonicalURL+'">Visit on FourSquare!</a>');
-		}).error(function() { alert("error"); });
+			    //get tips
+			    $.each(data.response.venue.tips.groups[0].items, function(i,items){
+			    	if (i<4) {
+			    		var tip=items.text;
+			    		$("#moreInfo"+divName+"").append('<br><span class="tips"><b>Customer Tip: </b><em>'+tip+'</em></span>');
+			    	}
+			    });
+			}
+			else {
+			    	$("#moreInfo"+divName+"").append('<em>No tips available.</em>');
+			    }
+			//TimeZone/Check in info
+			$("#moreInfo"+divName+"").append('<br><br>Time Zone: '+data.response.venue.timeZone);
+			$("#moreInfo"+divName+"").append('<br>Check-Ins at this Location: '+checkins);
+			$("#moreInfo"+divName+"").append('<br><a href="'+canonicalURL+'">Visit on FourSquare!</a>');
+			}).error(function() { alert("error"); 
+		});
 		$("#moreInfobut"+divName+"").attr("value", "Less Information");
 		$("#moreInfobut"+divName+"").css("background-color", "grey");
 	}
 }
 
-
+//Adds venues marked as "Added" to list
 function addPlaceToList(venueName, venueValue)
 {
 	$("#add"+venueValue+"").css("background-color", "green").attr("value","Added!");
@@ -193,7 +197,6 @@ function addPlaceToList(venueName, venueValue)
 		var getPlaceInfo = "getPlaceInfo('"+venueValue+"');";
 		$("#itinDestList").append('<div id="itinList'+venueValue+'"><p>'+value+'<input type="button" id="moreInfobut'+venueValue+'" class="moreInfo" name="infoBut" value="More Information" onClick="'+getPlaceInfo+'"><button class="remove" id="remove'+venueValue+'" onclick="'+deleditfunc+'">X Remove</button></p><div class="moreInfoBox" id="moreInfo'+venueValue+'"></div><hr/></div>');
 	});
-	console.log("the selected is "+ venueName);
 	var temp1;
 	var temp2;
 	$.getJSON('https://api.foursquare.com/v2/venues/'+ venueValue+'?oauth_token=JHPVGF1KAR2F5RBE0JDHKU0X0KOVGQGZKPFFJDNL3QIDMIH1&v=20131201',
@@ -212,6 +215,7 @@ function addPlaceToList(venueName, venueValue)
 	});
 }
 
+//Adds Places to be removed to a list
 function removePlaceFromList(venueName, tripName, venueValue)
 {
 	$("#remove"+venueValue+"").css("background-color", "red").attr("value","Removed!");
@@ -219,6 +223,7 @@ function removePlaceFromList(venueName, tripName, venueValue)
 	removeTripName = tripName;
 }
 
+//View/create map of locations directly after creating a new trip
 function viewMap()
 {
 	if (listArr.length==0)
@@ -233,7 +238,6 @@ function viewMap()
     	/* Place marker for each venue. */
     	for (var i = 0; i < listLat.length; i++) {
         	/* Get marker's location */
-        	//console.log('venues lat is '+ venues[i]['venue']['location']['lat'] + 'and longitude is '+ venues[i]['venue']['location']['lng']);
 	        features.push({
 	            type: 'Feature',
 	            geometry: {
@@ -246,20 +250,16 @@ function viewMap()
 	                title: [listArr[i]]
 	            }
 	        });
-        	console.log('the feature is '+ features[i].properties.title);
     	}
-		console.log(features);
 		map.markerLayer.setGeoJSON({
 	    	type: 'FeatureCollection',
 	    	features: features
 		});
 		map.setView([lat, lng], 10);
-		for (var i = 0; i < features.length; i++) {
-		//console.log('the feature is '+ features[i].properties.title);
-		}
 	}
 }
 
+//View/create map of all locations currently in a trip
 function viewMap2()
 {
 	var map;
@@ -270,7 +270,6 @@ function viewMap2()
     /* Place marker for each venue. */
     for (var i = 0; i < listLat.length; i++) {
         /* Get marker's location */
-        //console.log('venues lat is '+ venues[i]['venue']['location']['lat'] + 'and longitude is '+ venues[i]['venue']['location']['lng']);
 	    features.push({
 	        type: 'Feature',
 	            geometry: {
@@ -283,21 +282,18 @@ function viewMap2()
 	                title: [listArr[i]]
 	            }
 	        });
-        	console.log('the feature is '+ features[i].properties.title);
     }
-	console.log(features);
 	map.markerLayer.setGeoJSON({
 	    type: 'FeatureCollection',
 	    features: features
 	});
 	map.setView([lat, lng], 10);
-	for (var i = 0; i < features.length; i++) {
-		//console.log('the feature is '+ features[i].properties.title);
-	}
+	//sets currentMap to map for reference later
 	currentMap = map;
 	$("#mapDisp2").show();
 }
 
+//Recreates the map to reflect deleted/added locations
 function updateMap()
 {
 	var view = $("viewthisMap").attr('value');
@@ -313,7 +309,7 @@ function updateMap()
 	}
 }
 
-//TODO: save the array listArr to local storage with listName captured below
+//Save the array listArr to local storage with listName captured below
 function saveList()
 {
 	var listName=$('#listName').val();
@@ -327,7 +323,7 @@ function saveList()
 	viewMap();
 }
 
-
+//Displays list of all trips 
 function displayAllListNames()
 {
 	var ctr=0;
@@ -342,6 +338,7 @@ function displayAllListNames()
 var latArr=new Array();
 var elementToBeEdited;
 
+//Displays the List locations in a specific trip
 function viewSelectedList(tripName)
 {
 	$("#viewEdit").hide();
@@ -365,6 +362,7 @@ function viewSelectedList(tripName)
 	$("#thisTrip").show();
 }
 
+//deletes a location from a trip
 function delNewTrip(listName, itemName, venueValue)
 {
 	deleditfunc(listName, itemName);
@@ -372,6 +370,7 @@ function delNewTrip(listName, itemName, venueValue)
 	updateMap();
 }
 
+//deletes trips marked as Remove
 function delList()
 {
 	console.log(removeList.length);
@@ -384,41 +383,44 @@ function delList()
 	updateMap();
 }
 
+//deletes a location from a trip
 function deleditfunc(listName, itemName)
 {
-var res = store.get(listName);
-var temp=[];
-var tempctr=0;
-for(i=0;i<res.length;i++)
-{
-  if (res[i].name!= itemName)
-  {
-  	temp.push(res[i]);
-  }
-  else {
-  	$("#tripItem"+res[i].id+"").remove();
-  }
-}
-store.remove(listName);
-store.set(listName,temp);
-for(var j=0;j<listArr.length;j++)
-{
-	console.log("listarr"+listArr[j]);
-	if(listArr[j]==itemName)
+	var res = store.get(listName);
+	var temp=[];
+	var tempctr=0;
+	for(i=0;i<res.length;i++)
 	{
-		listArr.splice(j, 1);
-		listLat.splice(j, 1);
-		listLng.splice(j, 1);
-		console.log("itemname"+itemName);
+	  if (res[i].name!= itemName)
+	  {
+	  	temp.push(res[i]);
+	  }
+	  else {
+	  	$("#tripItem"+res[i].id+"").remove();
+	  }
+	}
+	store.remove(listName);
+	store.set(listName,temp);
+	for(var j=0;j<listArr.length;j++)
+	{
+		console.log("listarr"+listArr[j]);
+		if(listArr[j]==itemName)
+		{
+			listArr.splice(j, 1);
+			listLat.splice(j, 1);
+			listLng.splice(j, 1);
+			console.log("itemname"+itemName);
+		}
 	}
 }
-}
 
+//a different div id
 function deleditfunc2(venueValue)
 {
 	$("#itinList"+venueValue+"").remove();
 }
 
+//cancels changes made on a list
 function cancelList()
 {
 	removeList.length = 0;
@@ -434,6 +436,7 @@ function cancelList()
 	listArr.length =0;
 }
 
+//delete trips that are checked
 function deleteChecked()
 {
 	$('#myTrips').find(':checkbox').each(function(){
@@ -450,7 +453,7 @@ function deleteChecked()
 	});
 }
 
-
+//Load trips in storage in drop-down menu
 function loadItinList()
 {
 	store.forEach(function(val, key) {
@@ -458,6 +461,7 @@ function loadItinList()
 	})
 }
 
+//Get results from searching (when adding to a previous trip)
 function getResults()
 {
 	searchFail="succeeded";
@@ -487,6 +491,7 @@ function getResults()
 	$("#searchResults").show();
 }
 
+//Save the new updated trip list
 function saveThisList()
 {	
 	var itinName = $('#itinList').find(":selected").text();
@@ -511,6 +516,4 @@ function saveThisList()
     	$("#itinDestList").append('<div id="itinList'+res[i].id+'"><p>'+res[i].name+'<input type="button" id="moreInfobut'+res[i].id+'" class="moreInfo" name="infoBut" value="More Information" onClick="'+getPlaceInfo+'"><button class="remove" id="remove'+res[i].id+'" onclick="'+deleditfunc+'">X Remove</button></p><div class="moreInfoBox" id="moreInfo'+res[i].id+'"></div><hr/></div>');
 	}
 	$("#finalList").show();	
-	// viewMap2();
-	// updateMap();
 }
