@@ -65,7 +65,7 @@ function getSearchResults()
     			console.log("venue is"+ recVenueId);
     			var getPlaceInfo = "getPlaceInfo('"+recVenueId+"');";
     			var addPlaceToList = "addPlaceToList('"+recVenue.replace(/'/g, "\\'").replace(/"/g, "\\'")+"', '"+recVenueId+"');";
-    			$("#myList").append('<p>'+recVenue+'<input type="button" id="add'+recVenueId+'" class="add" name="input" value="Add" onClick="'+addPlaceToList+'"> <input type="button" id="moreInfobut'+recVenueId+'" class="moreInfo" name="infoBut" value="More Information" onClick="'+getPlaceInfo+'"></p><div id="moreInfo'+recVenueId+'"></div> <hr/>');
+    			$("#myList").append('<p>'+recVenue+'<input type="button" id="add'+recVenueId+'" class="add" name="input" value="Add" onClick="'+addPlaceToList+'"> <input type="button" id="moreInfobut'+recVenueId+'" class="moreInfo" name="infoBut" value="More Information" onClick="'+getPlaceInfo+'"></p><div class="moreInfoBox" id="moreInfo'+recVenueId+'"></div> <hr/>');
 	  		});
 	    },
     	error: function( data ) {
@@ -110,7 +110,7 @@ function viewCloseMap() {
 function getPlaceInfo(divName)
 {
 	var buttonColor = $("#moreInfobut"+divName+"").css('background-color');
-	if(buttonColor=="blue" || buttonColor == "rgb(0, 0, 255)")
+	if(buttonColor=="grey" || buttonColor == "rgb(128, 128, 128)")
 	{
 		$("#moreInfo"+divName+"").html('');
 		$("#moreInfobut"+divName+"").attr("value", "More Information");
@@ -123,27 +123,57 @@ function getPlaceInfo(divName)
 		function(data) {
 			var checkins=data.response.venue.stats.checkinsCount;
 		    console.log("no of checkins is "+checkins);
-		    var rating=data.response.venue.rating;
-		    //get photos
-		    $.each(data.response.venue.photos.groups[0].items, function(i,items){
+		    var canonicalURL=data.response.venue.canonicalUrl;
+		    var status = data.response.venue.hours;
+		    if(typeof status === "undefined")
+		    {
+		    	status = "None listed";
+		    }
+		    else {
+		    	status = data.response.venue.hours.status;
+		    }
+			//get photos
+		    if(data.response.venue.photos.count > 0)
+		    {
+		    	$.each(data.response.venue.photos.groups[0].items, function(i,items){
 		    	var pre=items.prefix;
 		    	var suf=items.suffix;
-		    	var imgurl=pre+'160x160'+suf;
+		    	var imgurl=pre+'100x100'+suf;
 		    	if (i<4)
-		    		$("#moreInfo"+divName+"").append('<img src='+imgurl+'>');
+		    		$("#moreInfo"+divName+"").append('<img src='+imgurl+' class="images">');
 		    });
+		    }
+		    else {
+		    	$("#moreInfo"+divName+"").append('<em>No photos available.</em><br/>');
+		    }
+
+			$("#moreInfo"+divName+"").append('<span class="info"><b>Hours Today: </b>'+status+'</span><br/>');
+			$.each(data.response.venue.attributes.groups, function(i,groups){
+		    	var name=groups.items[0].displayName;
+		    	var value = groups.items[0].displayValue;
+		    	if (i<3) {
+		    		$("#moreInfo"+divName+"").append('<span class="info"><strong>'+name+': </strong>'+value+'</span><br/>');
+		   		}
+		    });
+		    if(data.response.venue.tips.count > 0)
+		    {
 		    //get tips
 		    $.each(data.response.venue.tips.groups[0].items, function(i,items){
 		    	if (i<4) {
 		    		var tip=items.text;
-		    		$("#moreInfo"+divName+"").append('<br><b>Customer Tip</b>   '+tip);
+		    		$("#moreInfo"+divName+"").append('<br><span class="tips"><b>Customer Tip: </b><em>'+tip+'</em></span>');
 		    	}
 		    });
-		    $("#moreInfo"+divName+"").append('<br><br>Time Zone: '+data.response.venue.timeZone);
-		    $("#moreInfo"+divName+"").append('<br>Check-Ins at this Location: '+checkins);
+		}
+		else {
+		    	$("#moreInfo"+divName+"").append('<em>No tips available.</em>');
+		    }
+		$("#moreInfo"+divName+"").append('<br><br>Time Zone: '+data.response.venue.timeZone);
+		$("#moreInfo"+divName+"").append('<br>Check-Ins at this Location: '+checkins);
+		$("#moreInfo"+divName+"").append('<br><a href="'+canonicalURL+'">Visit on FourSquare!</a>');
 		}).error(function() { alert("error"); });
 		$("#moreInfobut"+divName+"").attr("value", "Less Information");
-		$("#moreInfobut"+divName+"").css("background-color", "blue");
+		$("#moreInfobut"+divName+"").css("background-color", "grey");
 	}
 }
 
@@ -161,7 +191,7 @@ function addPlaceToList(venueName, venueValue)
 		var listName=$('#listName').val();
 		var deleditfunc = "deleditfunc('"+listName+"', '"+value+"'); deleditfunc2('"+venueValue+"');"
 		var getPlaceInfo = "getPlaceInfo('"+venueValue+"');";
-		$("#itinDestList").append('<div id="itinList'+venueValue+'"><p>'+value+'<input type="button" id="moreInfobut'+venueValue+'" class="moreInfo" name="infoBut" value="More Information" onClick="'+getPlaceInfo+'"><button class="remove" id="remove'+venueValue+'" onclick="'+deleditfunc+'">X Remove</button></p><div id="moreInfo'+venueValue+'"></div><hr/></div>');
+		$("#itinDestList").append('<div id="itinList'+venueValue+'"><p>'+value+'<input type="button" id="moreInfobut'+venueValue+'" class="moreInfo" name="infoBut" value="More Information" onClick="'+getPlaceInfo+'"><button class="remove" id="remove'+venueValue+'" onclick="'+deleditfunc+'">X Remove</button></p><div class="moreInfoBox" id="moreInfo'+venueValue+'"></div><hr/></div>');
 	});
 	console.log("the selected is "+ venueName);
 	var temp1;
@@ -271,14 +301,14 @@ function viewMap2()
 function updateMap()
 {
 	var view = $("viewthisMap").attr('value');
+	currentMap.remove();
+	viewMap2();
 	if(view=="Close Map")
 	{
-		currentMap.remove();
-		viewMap2();
+
 	}
 	else {
-		currentMap.remove();
-		viewMap2();
+
 		$("#mapDisp2").hide();
 	}
 }
@@ -323,7 +353,7 @@ function viewSelectedList(tripName)
 		console.log('inside for');
 		var removePlaceFromList = "removePlaceFromList('"+result[i].name.replace(/'/g, "\\'")+"', '"+tripName.replace(/'/g, "\\'")+"', '"+result[i].id+"');"
 		var getPlaceInfo = "getPlaceInfo('"+result[i].id+"');";
-		$("#thisTripDet").append('<div id="tripItem'+result[i].id+'"><p>'+result[i].name+'<input type="button" id="moreInfobut'+result[i].id+'" class="moreInfo" name="infoBut" value="More Information" onClick="'+getPlaceInfo+'"><button class="remove" id="remove'+result[i].id+'" onclick="'+removePlaceFromList+'">X Remove</button></p><div id="moreInfo'+result[i].id+'"></div><hr/></div>');
+		$("#thisTripDet").append('<div id="tripItem'+result[i].id+'"><p>'+result[i].name+'<input type="button" id="moreInfobut'+result[i].id+'" class="moreInfo" name="infoBut" value="More Information" onClick="'+getPlaceInfo+'"><button class="remove" id="remove'+result[i].id+'" onclick="'+removePlaceFromList+'">X Remove</button></p><div class="moreInfoBox" id="moreInfo'+result[i].id+'"></div><hr/></div>');
 		
 		listArr.push(result[i].name);
 		$.getJSON('https://api.foursquare.com/v2/venues/'+result[i].id+'?oauth_token=JHPVGF1KAR2F5RBE0JDHKU0X0KOVGQGZKPFFJDNL3QIDMIH1&v=20131201',
@@ -446,7 +476,7 @@ function getResults()
     			console.log("venue is"+ recVenueId);
     			var getPlaceInfo = "getPlaceInfo('"+recVenueId+"');";
     			var addPlaceToList = "addPlaceToList('"+recVenue.replace(/'/g, "\\'").replace(/"/g, "\\'")+"', '"+recVenueId+"');";
-    			$("#myList").append('<p>'+recVenue+'<input type="button" id="add'+recVenueId+'" class="add" name="input" value="Add" onClick="'+addPlaceToList+'"> <input type="button" id="moreInfobut'+recVenueId+'" class="moreInfo" name="infoBut" value="More Information" onClick="'+getPlaceInfo+'"></p><div id="moreInfo'+recVenueId+'"></div> <hr/>');
+    			$("#myList").append('<p>'+recVenue+'<input type="button" id="add'+recVenueId+'" class="add" name="input" value="Add" onClick="'+addPlaceToList+'"> <input type="button" id="moreInfobut'+recVenueId+'" class="moreInfo" name="infoBut" value="More Information" onClick="'+getPlaceInfo+'"></p><div class="moreInfoBox" id="moreInfo'+recVenueId+'"></div> <hr/>');
 	  		});
 	    },
     	error: function( data ) {
@@ -478,8 +508,9 @@ function saveThisList()
 	{
 		var deleditfunc = "deleditfunc('"+itinName+"', '"+res[i].name+"'); deleditfunc2('"+res[i].id+"');"
 		var getPlaceInfo = "getPlaceInfo('"+res[i].id+"');";
-    	$("#itinDestList").append('<div id="itinList'+res[i].id+'"><p>'+res[i].name+'<input type="button" id="moreInfobut'+res[i].id+'" class="moreInfo" name="infoBut" value="More Information" onClick="'+getPlaceInfo+'"><button class="remove" id="remove'+res[i].id+'" onclick="'+deleditfunc+'">X Remove</button></p><div id="moreInfo'+res[i].id+'"></div><hr/></div>');
+    	$("#itinDestList").append('<div id="itinList'+res[i].id+'"><p>'+res[i].name+'<input type="button" id="moreInfobut'+res[i].id+'" class="moreInfo" name="infoBut" value="More Information" onClick="'+getPlaceInfo+'"><button class="remove" id="remove'+res[i].id+'" onclick="'+deleditfunc+'">X Remove</button></p><div class="moreInfoBox" id="moreInfo'+res[i].id+'"></div><hr/></div>');
 	}
 	$("#finalList").show();	
-	viewMap();
+	// viewMap2();
+	// updateMap();
 }
