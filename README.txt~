@@ -1,11 +1,13 @@
 TODO List:
 
 Web Application:
-- add new places to  itnerary
+- add new places to itnerary
 - modifications resulting from testing
 - welcome screen (?)
 - the venue search doesn't seem to work
-- require user to put in a name for trip
+- corresponding buttons (i.e. view/close, more/less, etc.)
+- prettify things
+- error checking
 
 For Submission:
 - testing & notes

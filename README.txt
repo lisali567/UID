@@ -4,8 +4,7 @@ Web Application:
 - add new places to itnerary
 - modifications resulting from testing
 - welcome screen (?)
-- the venue search doesn't seem to work
-- corresponding buttons (i.e. view/close, more/less, etc.)
+- corresponding buttons (i.e. view/close, etc.)
 - prettify things
 - error checking
 

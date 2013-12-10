@@ -49,8 +49,9 @@ function getSearchResults()
 	$('#myList').html('');
 	var resSize=0;
 	var searchString=$('#startingLoc').val();
+	var venueString=$('#venueLoc').val();
 	$.ajax({
-    	url: 'https://api.foursquare.com/v2/venues/explore?near='+ searchString+'&client_id=SC3J3U1LVJBWBL4YCBNBZCDF4IZJONWDZBRMD0SLFWFNGKJD&client_secret=AJGNKI2LJTQJAPC3KT3UQGZIGKBKTRA5JBCFQFZSRIGCWT3Y&v=20120101',
+    	url: 'https://api.foursquare.com/v2/venues/explore?near='+ searchString+'&query='+venueString+'&client_id=SC3J3U1LVJBWBL4YCBNBZCDF4IZJONWDZBRMD0SLFWFNGKJD&client_secret=AJGNKI2LJTQJAPC3KT3UQGZIGKBKTRA5JBCFQFZSRIGCWT3Y&v=20120101',
     	dataType: 'json',
     	success: function( data ) {
 	    	searchLat=data.response.geocode.center.lat;
@@ -77,7 +78,15 @@ function getSearchResults()
 //Prettify this
 function getPlaceInfo(divName)
 {
-
+	var buttonColor = $("#moreInfobut"+divName+"").css('background-color');
+	if(buttonColor=="blue" || buttonColor == "rgb(0, 0, 255)")
+	{
+		$("#moreInfo"+divName+"").html('');
+		$("#moreInfobut"+divName+"").attr("value", "More Information");
+		$("#moreInfobut"+divName+"").css("background-color", "");
+	}
+	else
+	{
 		$("#moreInfo"+divName+"").html('');
 		$.getJSON('https://api.foursquare.com/v2/venues/'+ divName+'?oauth_token=JHPVGF1KAR2F5RBE0JDHKU0X0KOVGQGZKPFFJDNL3QIDMIH1&v=20131201',
 		function(data) {
@@ -102,6 +111,9 @@ function getPlaceInfo(divName)
 		    $("#moreInfo"+divName+"").append('<br>time zone is '+data.response.venue.timeZone);
 		    $("#moreInfo"+divName+"").append('<br>number of checkins is   '+checkins);
 		}).error(function() { alert("error"); });
+		$("#moreInfobut"+divName+"").attr("value", "Less Information");
+		$("#moreInfobut"+divName+"").css("background-color", "blue");
+	}
 }
 
 
